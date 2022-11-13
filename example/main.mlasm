@@ -1,0 +1,84 @@
+; MLASM - Mindustry Logic Assembler 
+; Copyright (c) 2022 Arfelis Kayrisma
+; Github: https://github.com/arfelis/MLASM
+; 
+; = Краткий список новых элементов:
+; <метка>:                       - метка, к которой можно перейти при помощи jmp или call.
+; jmp <метка>                    - переход к указанной метке.
+; call <метка>                   - переход к указанной метке, запоминает адрес возврата на стек вызовов.
+; halt                           - возвращает к последнему вызову call, или в начало программы если стек вызовов пуст.
+; if <условие> <парам1> <парам2> - работает как jump но просто пропускает следующуыю инструкцию после себя.
+; Комментарии заменены на ; как свойственно большинству ассемблерных языков программирования.
+;
+; = Список требований:
+; Переменная _callstack_size зарезервирована.
+; Переменная _return_address зарезервирована.
+; К процессору должна быть подключена полностью зарезервированая ячейка памяти "cell1".
+;
+
+; = В данном примере написан код, рисующий на большом дисплее белый квадрат, который можно двигать при помощи переключателей.
+; display1 - большой дисплей
+; switch1  - Движение вверх
+; switch2  - Движение влево
+; switch3  - Движение вправо
+; switch4  - Движение вниз
+; switch5  - перезапуск программы
+;
+
+.init: 
+    set rect_x 83
+    set rect_y 83
+
+.loop: 
+    call .io
+
+    ; обрабатываем ввод
+    if equal press_up false
+        op add rect_y rect_y 1
+
+    if equal press_left false
+        op sub rect_x rect_x 1
+
+    if equal press_right false
+        op add rect_x rect_x 1
+
+    if equal press_down false
+        op sub rect_y rect_y 1
+
+    if equal press_reset false
+        end
+
+    ; не даём кубику сбежать за экран
+    if greaterThanEq rect_x 0
+        set rect_x 0
+
+    if lessThan rect_x 166
+        set rect_x 166
+
+    if greaterThanEq rect_y 0
+        set rect_y 0
+
+    if lessThan rect_y 166
+        set rect_y 166
+
+    call .draw
+    jmp .loop
+
+
+
+.draw:
+    draw clear 0 0 0 0
+    draw color 255 255 255 255
+    draw rect rect_x rect_y 10 10
+    drawflush display1
+    halt
+
+
+
+.io:
+    sensor press_up    switch1 @enabled
+    sensor press_left  switch2 @enabled
+    sensor press_right switch3 @enabled
+    sensor press_down  switch4 @enabled
+    sensor press_reset switch5 @enabled
+    halt

@@ -1,0 +1,24 @@
+{
+  "name": "mlasm",
+  "version": "1.0.0",
+  "description": "MLASM - Mindustry Language Assembler",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arfelis/MLASM.git"
+  },
+  "keywords": [
+    "Mindustry",
+    "Assembler",
+    "Compiler"
+  ],
+  "author": "Arfelis Kayrisma",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arfelis/MLASM/issues"
+  },
+  "homepage": "https://github.com/arfelis/MLASM#readme"
+}
